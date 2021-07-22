@@ -92,6 +92,7 @@ class SpiderDownloaderMiddleware:
         # - return a Request object
         # - or raise IgnoreRequest
         spider.browser.get(request.url)
+        time.sleep(3) # TODO: 添加显示等待功能，封装SpiderBrowser类
         js = "window.scrollTo(0,document.body.scrollHeight)"
         spider.browser.execute_script(js)
         time.sleep(3)  # 等待加载,  可以用显示等待来优化.

@@ -11,12 +11,14 @@ class BiliBiliSpider(Spider):
     name = "Bilibili"
     def __init__(self, *args, **kwargs):
         chorme_options = webdriver.ChromeOptions()
-        # chorme_options.add_argument("--headless")
-        # chorme_options.add_argument("--disable-gpu")
+        chorme_options.add_argument("--headless")
+        chorme_options.add_argument("--disable-gpu")
+        chorme_options.add_argument(r"user-data-dir=C:\Users\Almond\AppData\Local\Google\Chrome\User Data")
         self.browser = webdriver.Chrome(chrome_options=chorme_options)
         self.browser.maximize_window()
         super(BiliBiliSpider, self).__init__(*args, **kwargs)
 
+    @staticmethod
     def close(spider, reason):
         print(type(reason), reason)
         spider.browser.quit()
