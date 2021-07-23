@@ -4,12 +4,11 @@
 # See documentation in:
 # https://docs.scrapy.org/en/latest/topics/items.html
 
-import scrapy
+from scrapy import Item, Field
 
-
-class VideoItem(scrapy.Item):
+class VideoItem(Item):
     # define the fields for your item here like:
     # name = scrapy.Field()
-    name = scrapy.Field()
-    href = scrapy.Field()
-    up = scrapy.Field()
+    name = Field()
+    href = Field()
+    up = Field()

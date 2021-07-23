@@ -10,7 +10,6 @@ from itemadapter import ItemAdapter
 
 
 class SpiderPipeline:
-    collection_name = "bilibili"
     def __init__(self, mongo_uri, mongo_db):
         self.mongo_uri = mongo_uri
         self.mongo_db = mongo_db
@@ -18,10 +17,11 @@ class SpiderPipeline:
     @classmethod
     def from_crawler(cls, crawler):
         print("MONGO_URL",crawler.settings.get('MONGO_URI'))
-        print("MONGO_DATABASE",crawler.settings.get('MONGO_DATABASE', 'bilibili'))
+        print("MONGO_DATABASE",crawler.settings.get('MONGO_DATABASE'))
+        cls.collection = crawler.settings.get('MONGO_COLLECTION')
         return cls(
             mongo_uri=crawler.settings.get('MONGO_URI'),
-            mongo_db=crawler.settings.get('MONGO_DATABASE', 'bilibili')
+            mongo_db=crawler.settings.get('MONGO_DATABASE')
         )
 
     def open_spider(self, spider):
@@ -32,5 +32,5 @@ class SpiderPipeline:
         self.client.close()
 
     def process_item(self, item, spider):
-        self.db[self.collection_name].insert_one(ItemAdapter(item).asdict())
+        self.db[self.collection].insert_one(ItemAdapter(item).asdict())
         return item

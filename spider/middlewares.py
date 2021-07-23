@@ -8,9 +8,10 @@ import time
 from scrapy import signals
 
 # useful for handling different item types with a single interface
-from itemadapter import is_item, ItemAdapter
 from scrapy.downloadermiddlewares.useragent import UserAgentMiddleware
 from scrapy.http import HtmlResponse
+
+from spider.spiders.BiliBiliSpider import BiliBiliSpider
 
 
 class SpiderSpiderMiddleware:
@@ -64,6 +65,8 @@ class SpiderDownloaderMiddleware:
     # Not all methods need to be defined. If a method is not defined,
     # scrapy acts as if the downloader middleware does not modify the
     # passed objects.
+    def __init__(self):
+        self.last_url = None
 
     @classmethod
     def from_crawler(cls, crawler):
@@ -84,20 +87,21 @@ class SpiderDownloaderMiddleware:
         #   installed downloader middleware will be called
         return None
 
-    def process_response(self, request, response, spider):
+    def process_response(self, request, response, spider:BiliBiliSpider):
         # Called with the response returned from the downloader.
 
         # Must either;
         # - return a Response object
         # - return a Request object
         # - or raise IgnoreRequest
-        spider.browser.get(request.url)
-        time.sleep(3) # TODO: 添加显示等待功能，封装SpiderBrowser类
-        js = "window.scrollTo(0,document.body.scrollHeight)"
-        spider.browser.execute_script(js)
-        time.sleep(3)  # 等待加载,  可以用显示等待来优化.
-        row_response = spider.browser.page_source
-        return HtmlResponse(url=spider.browser.current_url, body=row_response, encoding="utf8",
+        if request.url != self.last_url:
+            spider.browser.get(request.url)
+            print("Request Url:",request.url)
+            self.last_url = request.url
+        time.sleep(0.5)
+        self.browser.loadPage()
+        time.sleep(0.5)
+        return HtmlResponse(url=spider.browser.current_url, body=spider.browser.page_source, encoding="utf8",
                             request=request)  # 参数url指当前浏览器访问的url(通过current_url方法获取), 在这里参数url也可以用request.url
 
     def process_exception(self, request, exception, spider):

@@ -63,9 +63,9 @@ DOWNLOADER_MIDDLEWARES = {
 
 # Configure item pipelines
 # See https://docs.scrapy.org/en/latest/topics/item-pipeline.html
-# ITEM_PIPELINES = {
-#    'spider.pipelines.SpiderPipeline': 300,
-# }
+ITEM_PIPELINES = {
+   'spider.pipelines.SpiderPipeline': 300,
+}
 
 # Enable and configure the AutoThrottle extension (disabled by default)
 # See https://docs.scrapy.org/en/latest/topics/autothrottle.html
@@ -93,3 +93,8 @@ LOG_LEVEL="WARNING"
 # MongoDB
 MONGO_URI = "localhost:27017"
 MONGO_DATABASE = "Test"
+MONGO_COLLECTION = "subscribe"
+
+# Browser
+HEADLESS = False
+USER_DATA = r"C:\Users\俊凯\AppData\Local\Google\Chrome\User Data"
