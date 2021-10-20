@@ -36,7 +36,7 @@ class BiliBiliSpider(ChromeSpider):
                 time.sleep(0.5)
                 response = self.getResponse()
 
-    def parse_vide_card(self, response):
+    def parse_video_card(self, response):
         for ele in response.xpath("//div[@class='video-card-common']"):
             yield {
                 "href": ele.xpath("./a").attrib["href"].strip(),

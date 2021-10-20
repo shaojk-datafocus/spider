@@ -99,7 +99,7 @@ class SpiderDownloaderMiddleware:
             print("Request Url:",request.url)
             self.last_url = request.url
         time.sleep(0.5)
-        self.browser.loadPage()
+        spider.browser.loadPage()
         time.sleep(0.5)
         return HtmlResponse(url=spider.browser.current_url, body=spider.browser.page_source, encoding="utf8",
                             request=request)  # 参数url指当前浏览器访问的url(通过current_url方法获取), 在这里参数url也可以用request.url

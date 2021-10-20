@@ -1,21 +1,13 @@
-# -*- coding: utf-8 -*-
-# @Time    : 2021/7/22 11:28
-# @Author  : ShaoJK
-# @File    : QuotesSpider.py
-# @Remark  :
-
 import scrapy
 
 class QuotesSpider(scrapy.Spider):
     name = "quotes"
+
     def start_requests(self):
-        urls = [
-            'http://quotes.toscrape.com/page/1/',
-            'http://quotes.toscrape.com/page/2/',
-        ]
+        urls = ['http://quotes.toscrape.com/page/1/']
         for url in urls:
             yield scrapy.Request(url=url, callback=self.parse)
-
+    
     def parse(self, response):
         page = response.url.split("/")[-2]
         filename = f'quotes-{page}.html'
