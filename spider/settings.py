@@ -97,4 +97,4 @@ MONGO_COLLECTION = "subscribe"
 
 # Browser
 HEADLESS = False
-USER_DATA = r"C:\Users\俊凯\AppData\Local\Google\Chrome\User Data"
+# USER_DATA = r"C:\Users\俊凯\AppData\Local\Google\Chrome\User Data"

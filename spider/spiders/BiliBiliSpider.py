@@ -15,11 +15,13 @@ class BiliBiliSpider(ChromeSpider):
 
     def start_requests(self):
         urls = [
-            ('https://www.bilibili.com/', self.parse_video_card)
+            # ('https://www.bilibili.com/', self.parse_video_card)
+            ('https://space.bilibili.com/17958944/video?tid=0&page=5&keyword=&order=pubdate')
             # ('https://space.bilibili.com/32361636/fans/follow', self.parse_subtitle)
         ]
-        for url,callback in urls:
-            yield Request(url=url, callback=callback)
+        urls = ['https://space.bilibili.com/17958944/video?tid=0&page=%s&keyword=&order=pubdate'%i for i in range(1,6)]
+        for url in urls:
+            yield Request(url=url, callback=self.parse_up_list)
 
     def parse_subtitle(self, response):
         ele = True
@@ -48,3 +50,11 @@ class BiliBiliSpider(ChromeSpider):
         # with open(filename, 'wb') as f:
         #     f.write(response.body)
         # self.log(f'Saved file {filename}')
+    
+    def parse_up_list(self, response):
+        for ele in response.xpath("//li[@class='small-item fakeDanmu-item']"):
+            yield {
+                "url": ele.xpath("./a").attrib["href"].strip(),
+                "name": ele.xpath(".//a[text()]/text()").get().strip(),
+                "time": ele.xpath(".//span[@class='time']/text()").get().strip()
+            }
