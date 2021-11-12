@@ -3,9 +3,7 @@
 # @Author  : ShaoJK
 # @File    : utils.py
 # @Remark  :
-from scrapy import Request
-from scrapy.utils.url import escape_ajax
-from w3lib.url import safe_url_string
+import time
 
 
 class Dict(dict):
@@ -18,3 +16,9 @@ class Dict(dict):
 
     def __setattr__(self, key, value):
         self[key] = value
+
+def timestamp_to_str(timestamp, format="%Y-%m-%d %H:%M:%S") -> str:
+    return time.strftime(format, time.localtime(timestamp))
+
+def str_to_timestamp(datetime, format="%Y-%m-%d %H:%M:%S") -> int:
+    return time.strptime(datetime, format)

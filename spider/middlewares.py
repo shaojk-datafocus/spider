@@ -11,7 +11,7 @@ from scrapy import signals
 from scrapy.downloadermiddlewares.useragent import UserAgentMiddleware
 from scrapy.http import HtmlResponse
 
-from spider.spiders.BiliBiliSpider import BiliBiliSpider
+from spider.spiders.ChromeSpider import ChromeSpider
 
 
 class SpiderSpiderMiddleware:
@@ -85,23 +85,27 @@ class SpiderDownloaderMiddleware:
         # - or return a Request object
         # - or raise IgnoreRequest: process_exception() methods of
         #   installed downloader middleware will be called
+        print("中间件 process_request")
         return None
 
-    def process_response(self, request, response, spider:BiliBiliSpider):
+    def process_response(self, request, response, spider:ChromeSpider):
         # Called with the response returned from the downloader.
 
         # Must either;
         # - return a Response object
         # - return a Request object
         # - or raise IgnoreRequest
+        print("中间件 process_response")
+        print("Request Url:",request.url)
+        if b"application/json" in response.headers['content-type']:
+            return response
         if request.url != self.last_url:
-            spider.browser.get(request.url)
-            print("Request Url:",request.url)
+            spider.driver.get(request.url)
             self.last_url = request.url
         time.sleep(0.5)
-        spider.browser.loadPage()
+        spider.driver.loadPage()
         time.sleep(0.5)
-        return HtmlResponse(url=spider.browser.current_url, body=spider.browser.page_source, encoding="utf8",
+        return HtmlResponse(url=spider.driver.current_url, body=spider.driver.page_source, encoding="utf8",
                             request=request)  # 参数url指当前浏览器访问的url(通过current_url方法获取), 在这里参数url也可以用request.url
 
     def process_exception(self, request, exception, spider):

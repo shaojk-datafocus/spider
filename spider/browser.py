@@ -26,9 +26,9 @@ class BrowserDriver(webdriver.Chrome):
 
     def click_by_content(self, keyword, label="*", direct=True):
         if direct:
-            self.click_direct("//%s[text()='%s']"%(label,keyword))
+            self.click_direct(self.get_visibility_element("//%s[text()='%s']"%(label,keyword)))
         else:
-            self.click_script("//%s[text()='%s']"%(label,keyword))
+            self.click_script(self.get_visibility_element("//%s[text()='%s']"%(label,keyword)))
 
     def loadPage(self):
         js = "window.scrollTo(0,document.body.scrollHeight)"
@@ -305,11 +305,11 @@ class BrowserDriver(webdriver.Chrome):
         """关闭当前页面，自动划入下一个标签页，如果下一个标签也不存在，就划入上一个标签页"""
         current_index = self.window_handles.index(self.current_window_handle)
         if current_index + 1 == len(self.window_handles):
-            self.close()
+            super().close()
             if current_index - 1 >= 0:
                 self.switch_window(current_index - 1)
         else:
-            self.close()
+            super().close()
             self.switch_window(current_index)
 
     def screenshot_as_array(self, ele: WebElement) -> np.ndarray:

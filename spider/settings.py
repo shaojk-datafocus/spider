@@ -64,7 +64,7 @@ DOWNLOADER_MIDDLEWARES = {
 # Configure item pipelines
 # See https://docs.scrapy.org/en/latest/topics/item-pipeline.html
 # ITEM_PIPELINES = {
-#    'spider.pipelines.SpiderPipeline': 300,
+#    'spider.pipelines.JsonPipeline': 300,
 # }
 
 # Enable and configure the AutoThrottle extension (disabled by default)
@@ -95,6 +95,11 @@ MONGO_URI = "localhost:27017"
 MONGO_DATABASE = "Test"
 MONGO_COLLECTION = "subscribe"
 
-# Browser
-HEADLESS = False
-# USER_DATA = r"C:\Users\俊凯\AppData\Local\Google\Chrome\User Data"
+GLOBAL_CONFIG = {
+    # Browser
+    "HEADLESS": True,
+    # "USER_DATA": r"C:\Users\Almond\AppData\Local\Google\Chrome\User Data",
+    # Tmall
+    "TMALL_ACCOUNT": "赛尼瑞旗舰店",
+    "TMALL_PASSWORD": "1234"
+}

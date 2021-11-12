@@ -9,7 +9,11 @@ from scrapy import Request
 from spider.spiders.ChromeSpider import ChromeSpider
 
 class BiliBiliSpider(ChromeSpider):
-    name = "Bilibili"
+    name = "bilibili"
+    custom_settings = { # 指定使用的piplines, piplines需要在setting里先注册
+        'ITEM_PIPELINES': {'spider.pipelines.BilibiliPipeline': 300,}
+    }
+    output_path = "bilibili_result.json"
     def __init__(self, *args, **kwargs):
         super(BiliBiliSpider, self).__init__(*args, **kwargs)
 
@@ -19,7 +23,7 @@ class BiliBiliSpider(ChromeSpider):
             ('https://space.bilibili.com/17958944/video?tid=0&page=5&keyword=&order=pubdate')
             # ('https://space.bilibili.com/32361636/fans/follow', self.parse_subtitle)
         ]
-        urls = ['https://space.bilibili.com/17958944/video?tid=0&page=%s&keyword=&order=pubdate'%i for i in range(1,6)]
+        urls = ['https://space.bilibili.com/17958944/video?tid=0&page=%s&keyword=&order=pubdate'%i for i in range(1,3)]
         for url in urls:
             yield Request(url=url, callback=self.parse_up_list)
 
@@ -32,7 +36,7 @@ class BiliBiliSpider(ChromeSpider):
                     "name": item.xpath(".//span[@class='fans-name']/text()").get().strip(),
                     "description": item.xpath(".//p[contains(@class,'desc')]").get().strip()
                 }
-            ele = self.browser.wait_appearance("//li[@class='be-pager-next']",timeout=3)
+            ele = self.browser.wait_appearance("//li[@class='be-pager-next']",timeout=1)
             if ele:
                 self.browser.click_direct(ele)
                 time.sleep(0.5)
